@@ -1,6 +1,7 @@
 package com.nploi.zentrix.resources;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,10 +30,15 @@ public class NoteObjectResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<NoteObjectEntity>> getAll(
-            @RequestParam(value = "root", required = false, defaultValue = "false") boolean root) {
+    public ResponseEntity<List<NoteObjectEntity>> find(
+            @RequestParam(value = "root", required = false, defaultValue = "false") boolean root,
+            @RequestParam(value = "parent-id", required = false) Long parentId) {
         if (root) {
             return ResponseEntity.ok(noteObjectService.findRootObjects());
+        }
+
+        if (Objects.nonNull(parentId)) {
+            return ResponseEntity.ok(noteObjectService.findByParentId(parentId));
         }
         return ResponseEntity.ok(noteObjectService.findAll());
     }

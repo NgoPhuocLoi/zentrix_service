@@ -13,7 +13,10 @@ import com.nploi.zentrix.enums.NoteObjectType;
 import com.nploi.zentrix.repository.FileContentRepository;
 import com.nploi.zentrix.repository.NoteObjectRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class NoteObjectService {
 
     @Autowired
@@ -30,7 +33,17 @@ public class NoteObjectService {
         return noteObjectRepository.findByParentIsNull();
     }
 
+    public List<NoteObjectEntity> findByParentId(Long parentId) {
+        if (parentId == null) {
+            log.warn("Parent ID is null, returning empty list.");
+            return List.of();
+        }
+        log.info("Finding note objects by parent ID: {}", parentId);
+        return noteObjectRepository.findByParentId(parentId);
+    }
+
     public NoteObjectEntity createNoteObject(CreateNoteObjectDto createNoteObjectDto) {
+
         NoteObjectEntity noteObjectEntity = NoteObjectEntityConverter.fromDto(createNoteObjectDto);
         NoteObjectEntity savedNoteObject = noteObjectRepository.save(noteObjectEntity);
         createDefaultFileContentIfNeeded(noteObjectEntity);
