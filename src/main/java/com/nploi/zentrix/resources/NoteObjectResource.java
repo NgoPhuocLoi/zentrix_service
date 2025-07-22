@@ -32,7 +32,7 @@ public class NoteObjectResource {
     @GetMapping
     public ResponseEntity<List<NoteObjectEntity>> find(
             @RequestParam(value = "root", required = false, defaultValue = "false") boolean root,
-            @RequestParam(value = "parent-id", required = false) Long parentId) {
+            @RequestParam(value = "parentId", required = false) Long parentId) {
         if (root) {
             return ResponseEntity.ok(noteObjectService.findRootObjects());
         }
