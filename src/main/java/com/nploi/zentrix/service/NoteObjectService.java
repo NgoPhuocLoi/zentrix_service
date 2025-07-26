@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import com.nploi.zentrix.converter.NoteObjectEntityConverter;
 import com.nploi.zentrix.dto.request.CreateNoteObjectDto;
 import com.nploi.zentrix.entity.FileContentEntity;
@@ -12,6 +15,7 @@ import com.nploi.zentrix.entity.NoteObjectEntity;
 import com.nploi.zentrix.enums.NoteObjectType;
 import com.nploi.zentrix.repository.FileContentRepository;
 import com.nploi.zentrix.repository.NoteObjectRepository;
+import com.nploi.zentrix.utils.NoteObjectJsonPatch;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,5 +62,14 @@ public class NoteObjectService {
                     .build();
             fileContentRepository.save(fileContentEntity);
         }
+    }
+
+    public NoteObjectEntity partialUpdateNoteObject(Long id, JsonPatch patch)
+            throws JsonProcessingException, IllegalArgumentException, JsonPatchException {
+
+        NoteObjectEntity existingNoteObject = noteObjectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("NoteObject with ID " + id + " not found."));
+        NoteObjectEntity patchedNoteObject = NoteObjectJsonPatch.applyPatch(patch, existingNoteObject);
+        return noteObjectRepository.save(patchedNoteObject);
     }
 }
