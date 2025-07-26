@@ -1,0 +1,54 @@
+# Ignore files that don't need to be in the Docker build context
+target/
+.git/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+*.md
+README.md
+HELP.md
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+*.iml
+*.ipr
+*.iws
+.idea/
+.eclipse/
+.metadata/
+.recommenders/
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+.sts4-cache/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Application config (if sensitive)
+application.yaml.gpg
+scripts/decrypt-app-config.sh
+scripts/encrypt-app-config.sh
+
+# Test reports
+*.txt
+surefire-reports/
