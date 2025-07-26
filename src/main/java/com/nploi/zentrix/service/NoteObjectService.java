@@ -37,6 +37,11 @@ public class NoteObjectService {
         return noteObjectRepository.findByParentIsNull();
     }
 
+    public NoteObjectEntity findById(Long id) {
+        return noteObjectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("NoteObject with ID " + id + " not found."));
+    }
+
     public List<NoteObjectEntity> findByParentId(Long parentId) {
         if (parentId == null) {
             log.warn("Parent ID is null, returning empty list.");
@@ -71,5 +76,12 @@ public class NoteObjectService {
                 .orElseThrow(() -> new IllegalArgumentException("NoteObject with ID " + id + " not found."));
         NoteObjectEntity patchedNoteObject = NoteObjectJsonPatch.applyPatch(patch, existingNoteObject);
         return noteObjectRepository.save(patchedNoteObject);
+    }
+
+    public void deleteNoteObject(Long id) {
+        NoteObjectEntity noteObjectEntity = noteObjectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("NoteObject with ID " + id + " not found."));
+        noteObjectRepository.delete(noteObjectEntity);
+        log.info("Deleted NoteObject with ID: {}", id);
     }
 }
