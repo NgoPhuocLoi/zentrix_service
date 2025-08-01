@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,12 @@ public class NoteObjectResource {
     @GetMapping
     public ResponseEntity<List<NoteObjectEntity>> find(
             @RequestParam(value = "root", required = false, defaultValue = "false") boolean root,
-            @RequestParam(value = "parentId", required = false) Long parentId) {
+            @RequestParam(value = "parentId", required = false) Long parentId,
+            @RequestParam(value = "id", required = false) Long id) {
+        if (Objects.nonNull(id)) {
+            return ResponseEntity.ok(List.of(noteObjectService.findById(id)));
+        }
+
         if (root) {
             return ResponseEntity.ok(noteObjectService.findRootObjects());
         }
@@ -53,5 +59,11 @@ public class NoteObjectResource {
             @RequestBody JsonPatch patch,
             @PathVariable Long id) throws JsonProcessingException, IllegalArgumentException, JsonPatchException {
         return ResponseEntity.ok(noteObjectService.partialUpdateNoteObject(id, patch));
+    }
+
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<Void> deleteNoteObject(@PathVariable Long id) {
+        noteObjectService.deleteNoteObject(id);
+        return ResponseEntity.noContent().build();
     }
 }
