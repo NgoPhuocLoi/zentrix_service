@@ -34,7 +34,7 @@ public class NoteObjectService {
     }
 
     public List<NoteObjectEntity> findRootObjects() {
-        return noteObjectRepository.findByParentIsNull();
+        return noteObjectRepository.findByParentIsNullOrderByCreatedAt();
     }
 
     public NoteObjectEntity findById(Long id) {
@@ -48,7 +48,7 @@ public class NoteObjectService {
             return List.of();
         }
         log.info("Finding note objects by parent ID: {}", parentId);
-        return noteObjectRepository.findByParentId(parentId);
+        return noteObjectRepository.findByParentIdOrderByCreatedAt(parentId);
     }
 
     public NoteObjectEntity createNoteObject(CreateNoteObjectDto createNoteObjectDto) {

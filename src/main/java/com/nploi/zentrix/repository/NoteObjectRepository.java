@@ -9,8 +9,8 @@ import com.nploi.zentrix.entity.NoteObjectEntity;
 
 public interface NoteObjectRepository extends JpaRepository<NoteObjectEntity, Long> {
 
-    List<NoteObjectEntity> findByParentIsNull();
+    List<NoteObjectEntity> findByParentIsNullOrderByCreatedAt();
 
-    @Query("SELECT n FROM NoteObjectEntity n WHERE n.parent.id = :parentId")
-    List<NoteObjectEntity> findByParentId(Long parentId);
+    @Query("SELECT n FROM NoteObjectEntity n WHERE n.parent.id = :parentId ORDER BY n.createdAt")
+    List<NoteObjectEntity> findByParentIdOrderByCreatedAt(Long parentId);
 }
